@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
+from typing import Optional
 from psycopg2.extras import RealDictCursor
 import os
 import hashlib
@@ -44,7 +45,7 @@ class BookmarkCreate(BaseModel):
     user_id: int
     title: str
     url: str
-    image_url: str | None = None
+    image_url: Optional[str] = None
 
 # --- Setup Endpoint ---
 @app.post("/setup-db", tags=["Setup"])
