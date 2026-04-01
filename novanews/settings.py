@@ -119,11 +119,21 @@ WSGI_APPLICATION = "novanews.wsgi.application"
 # DATABASE
 # =====================================================
 
+# 1. Fetch the password from your .env file
+SUPABASE_PASSWORD = env("SupaBase_Password", default="")
+
+# 2. Construct the full connection string dynamically
+if SUPABASE_PASSWORD:
+    SUPABASE_URL = f"postgresql://postgres:{SUPABASE_PASSWORD}@db.imldatxbnfvktxemwdis.supabase.co:5432/postgres"
+else:
+    SUPABASE_URL = "sqlite:///db.sqlite3"
+
+# 3. Pass it to dj_database_url
 DATABASES = {
     "default": dj_database_url.config(
         default=env(
             "DATABASE_URL",
-            default="sqlite:///db.sqlite3"
+            default=SUPABASE_URL
         ),
         conn_max_age=600,
     )
