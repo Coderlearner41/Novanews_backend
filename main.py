@@ -24,11 +24,11 @@ app.add_middleware(
 def get_db_connection():
     password = os.getenv("SupaBase_Password")
     conn = psycopg2.connect(
-        host="db.imldatxbnfvktxemwdis.supabase.co",
+        host="aws-1-ap-northeast-1.pooler.supabase.com", 
         database="postgres",
-        user="postgres",
-        password=password,
-        port="5432"
+        user="postgres.imldatxbnfvktxemwdis", 
+        password=password, # Keeps using the password from your .env file
+        port="6543" 
     )
     return conn
 
