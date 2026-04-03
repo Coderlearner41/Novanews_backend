@@ -174,3 +174,25 @@ def get_bookmarks(user_id: int):
 @app.get("/", tags=["Health"])
 def health_check():
     return {"status": "Novanews API is running"}
+
+
+@app.delete("/bookmarks/{bookmark_id}", tags=["Bookmarks"])
+def delete_bookmark(bookmark_id: int):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # Execute delete and return the deleted ID to confirm it worked
+        cur.execute("DELETE FROM bookmarks WHERE id = %s RETURNING id", (bookmark_id,))
+        deleted_id = cur.fetchone()
+        conn.commit()
+        
+        cur.close()
+        conn.close()
+        
+        if not deleted_id:
+            raise HTTPException(status_code=404, detail="Bookmark not found")
+            
+        return {"status": "success", "message": "Bookmark removed"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
